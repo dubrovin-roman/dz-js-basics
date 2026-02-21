@@ -1,15 +1,7 @@
-const language = 'ru';
+const hasLicence = true;
+const age = 18;
+const isDrunk = false;
 
-switch (language) {
-    case 'ru':
-        console.log('Добрый день!');
-        break;
-    case 'de':
-        console.log('Gutten tag!');
-        break;
-    case 'en':
-        console.log('Good afternoon!');
-        break;
-    default:
-        console.log('The specified language is not supported.');
-}
+const result = hasLicence ? age >= 18 ? !isDrunk ? 'может' : 'не может' : 'не может' : 'не может';
+
+console.log(result);
