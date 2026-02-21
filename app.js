@@ -1,8 +1,15 @@
-const addressLat = 35;
-const addressLong = 40;
-const positionLat = 10;
-const positionLong = 20;
+const language = 'ru';
 
-const distance = Math.sqrt((addressLat - positionLat) ** 2 + (addressLong - positionLong) ** 2);
-
-console.log(`Дистанция до объекта составляет: ${distance}.`);
+switch (language) {
+    case 'ru':
+        console.log('Добрый день!');
+        break;
+    case 'de':
+        console.log('Gutten tag!');
+        break;
+    case 'en':
+        console.log('Good afternoon!');
+        break;
+    default:
+        console.log('The specified language is not supported.');
+}
