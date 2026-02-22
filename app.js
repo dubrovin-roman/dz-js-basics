@@ -4,30 +4,20 @@ function crypto(password) {
     if (typeof password !== 'string' || !password) {
         return undefined;
     }
-    const array = password.trim().split('').reverse();
+    const array = password.trim().split('');
+    const arr1 = array.splice(0, 4).reverse();
     let el1 = array.pop();
     let el2 = array.shift();
-    let el3 = array.pop();
-    let el4 = array.shift();
     array.unshift(el1);
     array.push(el2);
-    array.unshift(el3);
-    array.push(el4);
-    return array.join('');
+    return arr1.concat(array).join('');
 }
 
 function check(cryptoPass, password) {
-    const array = cryptoPass.split('');
-    let el1 = array.pop();
-    let el2 = array.shift();
-    let el3 = array.pop();
-    let el4 = array.shift();
-    array.unshift(el1);
-    array.push(el2);
-    array.unshift(el3);
-    array.push(el4);
-    array.reverse();
-    return array.join('') === password;
+    if (typeof password !== 'string' || !password) {
+        return undefined;
+    }
+    return crypto(cryptoPass) === password;
 }
 
 console.log(crypto(testPass));
