@@ -1,25 +1,27 @@
-const testPass = 'password';
+function bubbleSort(arr) {
+  // Создаём копию массива, чтобы не изменять исходный
+  const sortedArr = [...arr];
+  const n = sortedArr.length;
 
-function crypto(password) {
-    if (typeof password !== 'string' || !password) {
-        return undefined;
+  // Внешний цикл — проходит по всем элементам массива
+  for (let i = 0; i < n - 1; i++) {
+    // Внутренний цикл — сравнивает соседние элементы
+    for (let j = 0; j < n - i - 1; j++) {
+      // Если текущий элемент больше следующего — меняем их местами
+      if (sortedArr[j] > sortedArr[j + 1]) {
+        // Временная переменная для обмена
+        const temp = sortedArr[j];
+        sortedArr[j] = sortedArr[j + 1];
+        sortedArr[j + 1] = temp;
+      }
     }
-    const array = password.trim().split('');
-    const arr1 = array.splice(0, 4).reverse();
-    let el1 = array.pop();
-    let el2 = array.shift();
-    array.unshift(el1);
-    array.push(el2);
-    return arr1.concat(array).join('');
+  }
+
+  return sortedArr;
 }
 
-function check(cryptoPass, password) {
-    if (typeof password !== 'string' || !password) {
-        return undefined;
-    }
-    return crypto(cryptoPass) === password;
-}
+const arr = [1, 40, -5, 10, 0];
+const sortedArr = bubbleSort(arr);
 
-console.log(crypto(testPass));
-console.log(check(crypto(testPass), testPass));
-console.log(check(crypto(testPass), 'wrong'));
+console.log('Исходный массив:', arr);
+console.log('Отсортированный массив:', sortedArr);
