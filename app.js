@@ -1,26 +1,25 @@
-function convertCurrency(amountOfFunds, currencyOfFunds, targetCurrency) {
-    if (typeof amountOfFunds !== 'number' 
-        || amountOfFunds < 0 
-        || typeof currencyOfFunds !== 'string' 
-        || typeof targetCurrency !== 'string') {
+const testPass = 'password';
+
+function crypto(password) {
+    if (typeof password !== 'string' || !password) {
         return undefined;
     }
-
-    const RUB_TO_USD = 76.7519;
-    switch (currencyOfFunds) {
-        case 'руб':
-            if (targetCurrency === '$') {
-                return amountOfFunds / RUB_TO_USD;
-            } else {
-                return null;
-            }
-        case '$':
-            if (targetCurrency === 'руб') {
-                return amountOfFunds * RUB_TO_USD;
-            } else {
-                return null;
-            }
-        default:
-            return null;
-    }
+    const array = password.trim().split('');
+    const arr1 = array.splice(0, 4).reverse();
+    let el1 = array.pop();
+    let el2 = array.shift();
+    array.unshift(el1);
+    array.push(el2);
+    return arr1.concat(array).join('');
 }
+
+function check(cryptoPass, password) {
+    if (typeof password !== 'string' || !password) {
+        return undefined;
+    }
+    return crypto(cryptoPass) === password;
+}
+
+console.log(crypto(testPass));
+console.log(check(crypto(testPass), testPass));
+console.log(check(crypto(testPass), 'wrong'));
