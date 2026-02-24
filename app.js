@@ -1,38 +1,39 @@
-function isValidDate(dateString) {
-  if (typeof dateString !== 'string') {
-    return false;
+/**
+ * Проверка номера карты по алгоритму Луна (Luhn)
+ * @param {string | number} cardNumber
+ * @returns {boolean}
+ */
+function isValidCardLuhn(cardNumber) {
+  if (cardNumber === null || cardNumber === undefined) return false;
+
+  // Приводим к строке и убираем пробелы/дефисы
+  const cleaned = String(cardNumber).replace(/[\s-]/g, "");
+
+  // Должны остаться только цифры
+  if (!/^\d+$/.test(cleaned)) return false;
+
+  // Обычно длина карты 12–19 цифр (опциональная проверка)
+  if (cleaned.length < 12 || cleaned.length > 19) return false;
+
+  let sum = 0;
+  let shouldDouble = false;
+
+  // Идём справа налево
+  for (let i = cleaned.length - 1; i >= 0; i--) {
+    let digit = Number(cleaned[i]);
+
+    if (shouldDouble) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+
+    sum += digit;
+    shouldDouble = !shouldDouble;
   }
 
-  // Регулярное выражение для формата DD-MM-YYYY или DD/MM/YYYY
-  const dateRegex = /^(\d{2})([-\/])(\d{2})\2(\d{4})$/;
-  const match = dateString.match(dateRegex);
-
-  if (!match) {
-    return false;
-  }
-
-  const [, day, separator, month, year] = match;
-  const dayNum = parseInt(day, 10);
-  const monthNum = parseInt(month, 10) - 1; // Месяц в Date начинается с 0
-  const yearNum = parseInt(year, 10);
-
-  // Создаём дату и проверяем её корректность
-  const testDate = new Date(yearNum, monthNum, dayNum);
-
-  return (
-    testDate.getFullYear() === yearNum &&
-    testDate.getMonth() === monthNum &&
-    testDate.getDate() === dayNum
-  );
+  return sum % 10 === 0;
 }
 
-function getDateInFormatFromArray(arr) {
-  return arr.filter((el) => isValidDate(el)).map((el) => {
-    const separator = el.at(2);
-    const temp = el.split(separator);
-    return temp.join('-');
-  });
-}
-
-const strings = ['10-02-2022', 'тест', '11/12/2023', '00/13/2022', '41/12/2023'];
-console.log(getDateInFormatFromArray(strings));
+console.log(isValidCardLuhn("4111 1111 1111 1111")); // true (тестовый номер Visa)
+console.log(isValidCardLuhn("4111-1111-1111-1112")); // false
+console.log(isValidCardLuhn("1234 5678 9012 3456")); // false
