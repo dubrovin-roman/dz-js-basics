@@ -1,34 +1,80 @@
-function getStringParameters(query) {
-  if (Object.keys(query).length === 0) {
-    return undefined;
-  }
-
-  const parameters = [];
-  for (let key in query) {
-    if (typeof query[key] === 'function') {
-      continue;
+const toDoList = {
+  tasks: [{title: 'Помыть посуду', id: 1, priority: 1}],
+  addTask: function (task) {
+    if (!task?.id 
+      || typeof task.id !== 'number' 
+      || task.id <= 0 
+      || this.getTaskById(task.id)
+      || !task?.priority 
+      || typeof task.priority !== 'number'
+      || !task?.title
+      || typeof task.title !== 'string') {
+        return false;
+      }
+      this.tasks.push(task);
+      return true;
+  },
+  getTaskById: function (id) {
+    if (typeof id !== 'number' 
+      || id <= 0 
+      || this.tasks.length === 0) {
+      return false;
     }
-    parameters.push(`${key}=${query[key]}`);
+    for (let task of this.tasks) {
+      if (task.id === id) {
+        return task;
+      }
+    }
+    return false;
+  },
+  deleteTaskById: function (id) {
+    if (typeof id !== 'number' 
+      || id <= 0 
+      || this.tasks.length === 0
+      || !this.getTaskById(id)) {
+      return false;
+    }
+    const index = this.tasks.findIndex(el => el.id === id);
+    return this.tasks.splice(index, 1);
+  },
+  sortByPriority: function () {
+    this.tasks.sort((a, b) => a.priority - b.priority);
+  },
+  updateNameById: function (id, title) {
+    if (typeof id !== 'number'
+      || typeof title !== 'string'
+      || !this.getTaskById(id)
+    ) {
+      return false;
+    }
+    const index = this.tasks.findIndex(el => el.id === id);
+    this.tasks[index].title = title;
+    return this.tasks[index];
+  },
+  updatePriorityById: function (id, priority) {
+    if (typeof id !== 'number'
+      || typeof priority !== 'number'
+      || !this.getTaskById(id)
+    ) {
+      return false;
+    }
+    const index = this.tasks.findIndex(el => el.id === id);
+    this.tasks[index].priority = priority;
+    return this.tasks[index];
   }
-  return parameters.join('&');
 }
 
-const query = {
-  search: 'Вася',
-  take: 10
-};
-
-const query1 = {};
-
-const query2 = {
-  search: 'Петя',
-  getParamSearch: function () {
-    return this.search;
-  },
-  take: 152
-};
-
-
-console.log(getStringParameters(query));
-console.log(getStringParameters(query1));
-console.log(getStringParameters(query2));
+console.log(toDoList.addTask({title: 'Почистить картошку', id: 1, priority: 2}));
+console.log(toDoList.addTask({title: 'Почистить картошку', id: 2, priority: 5}));
+console.log(toDoList.addTask({title: 'Вынести мусор', id: 3, priority: 3}));
+console.log(toDoList.addTask({title: 'Пропылесосить', id: 4, priority: 4}));
+console.log(toDoList.addTask({title: 'Приготовить еду', id: 5, priority: 3}));
+console.log(toDoList.getTaskById(1));
+console.log(toDoList.deleteTaskById(3));
+console.log(toDoList.deleteTaskById(123));
+console.log(toDoList.updateNameById(5, 'Приготовить еду update'));
+console.log(toDoList.updateNameById(123, 'Приготовить еду update1'));
+console.log(toDoList.updatePriorityById(5, 10));
+console.log(toDoList.updatePriorityById(123, 10));
+toDoList.sortByPriority();
+console.log(toDoList.tasks);
