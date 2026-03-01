@@ -4,7 +4,6 @@ const toDoList = {
     if (!task?.id 
       || typeof task.id !== 'number' 
       || task.id <= 0 
-      || this.getTaskById(task.id)
       || !task?.priority 
       || typeof task.priority !== 'number'
       || !task?.title
@@ -30,8 +29,7 @@ const toDoList = {
   deleteTaskById: function (id) {
     if (typeof id !== 'number' 
       || id <= 0 
-      || this.tasks.length === 0
-      || !this.getTaskById(id)) {
+      || this.tasks.length === 0) {
       return false;
     }
     const index = this.tasks.findIndex(el => el.id === id);
@@ -43,7 +41,6 @@ const toDoList = {
   updateNameById: function (id, title) {
     if (typeof id !== 'number'
       || typeof title !== 'string'
-      || !this.getTaskById(id)
     ) {
       return false;
     }
@@ -54,7 +51,6 @@ const toDoList = {
   updatePriorityById: function (id, priority) {
     if (typeof id !== 'number'
       || typeof priority !== 'number'
-      || !this.getTaskById(id)
     ) {
       return false;
     }
@@ -63,7 +59,7 @@ const toDoList = {
     return this.tasks[index];
   }
 }
-
+/*
 console.log(toDoList.addTask({title: 'Почистить картошку', id: 1, priority: 2}));
 console.log(toDoList.addTask({title: 'Почистить картошку', id: 2, priority: 5}));
 console.log(toDoList.addTask({title: 'Вынести мусор', id: 3, priority: 3}));
@@ -78,3 +74,20 @@ console.log(toDoList.updatePriorityById(5, 10));
 console.log(toDoList.updatePriorityById(123, 10));
 toDoList.sortByPriority();
 console.log(toDoList.tasks);
+*/
+const newTasks = {
+    tasks: [{ id: 1, title: 'тест', priority: 0}]
+};
+
+console.log(toDoList.addTask.call(newTasks, {title: 'Почистить картошку', id: 2, priority: 5}));
+console.log(toDoList.addTask.call(newTasks, {title: 'Вынести мусор', id: 3, priority: 3}));
+console.log(toDoList.addTask.call(newTasks, {title: 'Пропылесосить', id: 4, priority: 4}));
+console.log(toDoList.addTask.call(newTasks, {title: 'Приготовить еду', id: 5, priority: 3}));
+console.log(toDoList.deleteTaskById.call(newTasks, 1));
+console.log(toDoList.getTaskById.call(newTasks, 2));
+toDoList.sortByPriority.call(newTasks);
+console.log(newTasks.tasks);
+console.log(toDoList.updateNameById.call(newTasks, 5, 'Приготовить еду update'));
+console.log(newTasks.tasks);
+console.log(toDoList.updatePriorityById.call(newTasks, 5, 10));
+console.log(newTasks.tasks);
