@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./app.js" defer></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="./app.js" defer></script>
+    <link rel="stylesheet" href="/styles.css" />
 </head>
-<body style="background-color: #1C1B21; text-align: center;">
-    <img src="./logo.svg" alt="">
+
+<body style="background-color: #1c1b21; text-align: center">
+    <img src="./logo.svg" alt="" />
+    <div class="panel">Результат вычислений.</div>
+    <input type="number" id="fist-number" placeholder="Первое число" class="input">
+    <input type="number" id="second-number" placeholder="Второе число" class="input">
+    <button class="button" id="addition">сложение</button>
+    <button class="button" id="division">деление</button>
+    <button class="button" id="subtraction">вычитание</button>
+    <button class="button" id="multiplication">умножение</button>
+    <button class="button" id="reset">сброс результата</button>
+    <div class="notification">Changed!</div>
 </body>
+
 </html>
