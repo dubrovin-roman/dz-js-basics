@@ -1,93 +1,93 @@
-const toDoList = {
-  tasks: [{title: 'Помыть посуду', id: 1, priority: 1}],
-  addTask: function (task) {
-    if (!task?.id 
-      || typeof task.id !== 'number' 
-      || task.id <= 0 
-      || !task?.priority 
-      || typeof task.priority !== 'number'
-      || !task?.title
-      || typeof task.title !== 'string') {
-        return false;
-      }
-      this.tasks.push(task);
-      return true;
-  },
-  getTaskById: function (id) {
-    if (typeof id !== 'number' 
-      || id <= 0 
-      || this.tasks.length === 0) {
-      return false;
-    }
-    for (let task of this.tasks) {
-      if (task.id === id) {
-        return task;
-      }
-    }
-    return false;
-  },
-  deleteTaskById: function (id) {
-    if (typeof id !== 'number' 
-      || id <= 0 
-      || this.tasks.length === 0) {
-      return false;
-    }
-    const index = this.tasks.findIndex(el => el.id === id);
-    return this.tasks.splice(index, 1);
-  },
-  sortByPriority: function () {
-    this.tasks.sort((a, b) => a.priority - b.priority);
-  },
-  updateNameById: function (id, title) {
-    if (typeof id !== 'number'
-      || typeof title !== 'string'
-    ) {
-      return false;
-    }
-    const index = this.tasks.findIndex(el => el.id === id);
-    this.tasks[index].title = title;
-    return this.tasks[index];
-  },
-  updatePriorityById: function (id, priority) {
-    if (typeof id !== 'number'
-      || typeof priority !== 'number'
-    ) {
-      return false;
-    }
-    const index = this.tasks.findIndex(el => el.id === id);
-    this.tasks[index].priority = priority;
-    return this.tasks[index];
-  }
-}
-/*
-console.log(toDoList.addTask({title: 'Почистить картошку', id: 1, priority: 2}));
-console.log(toDoList.addTask({title: 'Почистить картошку', id: 2, priority: 5}));
-console.log(toDoList.addTask({title: 'Вынести мусор', id: 3, priority: 3}));
-console.log(toDoList.addTask({title: 'Пропылесосить', id: 4, priority: 4}));
-console.log(toDoList.addTask({title: 'Приготовить еду', id: 5, priority: 3}));
-console.log(toDoList.getTaskById(1));
-console.log(toDoList.deleteTaskById(3));
-console.log(toDoList.deleteTaskById(123));
-console.log(toDoList.updateNameById(5, 'Приготовить еду update'));
-console.log(toDoList.updateNameById(123, 'Приготовить еду update1'));
-console.log(toDoList.updatePriorityById(5, 10));
-console.log(toDoList.updatePriorityById(123, 10));
-toDoList.sortByPriority();
-console.log(toDoList.tasks);
-*/
-const newTasks = {
-    tasks: [{ id: 1, title: 'тест', priority: 0}]
-};
+'use strict';
+const ERROR_EMPTY_NUMBER = 'Проверте числа! Одно из них не было введено!';
+const DEFAULT_PANEL_VALUE = 'Результат вычислений.';
+const DEFAULT = 'DEFAULT';
 
-console.log(toDoList.addTask.call(newTasks, {title: 'Почистить картошку', id: 2, priority: 5}));
-console.log(toDoList.addTask.call(newTasks, {title: 'Вынести мусор', id: 3, priority: 3}));
-console.log(toDoList.addTask.call(newTasks, {title: 'Пропылесосить', id: 4, priority: 4}));
-console.log(toDoList.addTask.call(newTasks, {title: 'Приготовить еду', id: 5, priority: 3}));
-console.log(toDoList.deleteTaskById.call(newTasks, 1));
-console.log(toDoList.getTaskById.call(newTasks, 2));
-toDoList.sortByPriority.call(newTasks);
-console.log(newTasks.tasks);
-console.log(toDoList.updateNameById.call(newTasks, 5, 'Приготовить еду update'));
-console.log(newTasks.tasks);
-console.log(toDoList.updatePriorityById.call(newTasks, 5, 10));
-console.log(newTasks.tasks);
+const panel = document.querySelector('.panel');
+const firstInput = document.querySelector('#fist-number');
+const secondInput = document.querySelector('#second-number');
+
+const additionBtn = document.querySelector('#addition');
+const divisionBtn = document.querySelector('#division');
+const subtractionBtn = document.querySelector('#subtraction');
+const multiplicationBtn = document.querySelector('#multiplication');
+const resetBtn = document.querySelector('#reset');
+
+const addition = (first, second) => first + second;
+const division = (first, second) => {
+    if (second === 0) {
+        return 'На ноль делить нельзя, попробуй еще раз!';
+    } else {
+        return first / second;
+    }
+};
+const subtraction = (first, second) => first - second;
+const multiplication = (first, second) => first * second;
+
+
+function performArithmeticOperation(firstInputElement, secondInputElement, operation) {
+    if (firstInputElement === null || secondInputElement === null || typeof operation !== 'function') {
+        return null;
+    }
+    
+    const firstNumText = firstInputElement.value;
+    const secondNumText = secondInputElement.value;
+    
+    if (!firstNumText || !secondNumText) {
+        return ERROR_EMPTY_NUMBER;
+    }
+
+    const firstNum = Number(firstNumText);
+    const secondNum = Number(secondNumText);
+
+    return operation(firstNum, secondNum);
+}
+
+function reflectResultInHTMLElement(result, panelElement, firstInputElement, secondInputElement) {
+    if (panelElement === null || firstInputElement === null || secondInputElement === null) {
+        return;
+    }
+    if (result === null) {
+        panelElement.innerText = 'Результат не был получен!';
+        firstInputElement.value = '';
+        secondInputElement.value = '';
+        return;
+    }
+    if (result === ERROR_EMPTY_NUMBER) {
+        panelElement.innerText = result;
+        return;
+    }
+    if (result === DEFAULT) {
+        panelElement.innerText = DEFAULT_PANEL_VALUE;
+        firstInputElement.value = '';
+        secondInputElement.value = '';
+        return;
+    }
+    panelElement.innerText = result;
+    firstInputElement.value = '';
+    secondInputElement.value = '';
+}
+
+resetBtn.addEventListener('click', () => {
+    reflectResultInHTMLElement(DEFAULT, panel, firstInput, secondInput);
+});
+
+additionBtn.addEventListener('click', () => {
+    const result = performArithmeticOperation(firstInput, secondInput, addition);
+    reflectResultInHTMLElement(result, panel, firstInput, secondInput);
+});
+
+divisionBtn.addEventListener('click', () => {
+    const result = performArithmeticOperation(firstInput, secondInput, division);
+    reflectResultInHTMLElement(result, panel, firstInput, secondInput);
+});
+
+subtractionBtn.addEventListener('click', () => {
+    const result = performArithmeticOperation(firstInput, secondInput, subtraction);
+    reflectResultInHTMLElement(result, panel, firstInput, secondInput);
+});
+
+multiplicationBtn.addEventListener('click', () => {
+    const result = performArithmeticOperation(firstInput, secondInput, multiplication);
+    reflectResultInHTMLElement(result, panel, firstInput, secondInput);
+});
